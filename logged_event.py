@@ -8,3 +8,5 @@ class event(object):
         # no tags for now
         #self.tag = tag
     
+    def __str__(self):
+        return self.datetime + ", " + self.type

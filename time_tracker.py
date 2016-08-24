@@ -10,6 +10,11 @@ from oauth2client import tools
 # takes an event and records it in a google sheet
 def record_event_sheets(e):
     upload(e)
+
+def record_event_local(e):
+    f = open('time.log', 'a')
+    f.write(e + '\n')
+    f.close()
     
 
 if __name__ == '__main__':
@@ -22,6 +27,7 @@ if __name__ == '__main__':
     
     e = logged_event.event(flags.activity)
 
-    record_event_sheets(e)
+    #record_event_sheets(e)
     
+    record_event_local(str(e))
 
