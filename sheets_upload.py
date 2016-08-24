@@ -10,7 +10,7 @@ from oauth2client import tools
 
 import consts
 
-def upload(time, event_type):
+def upload(event):
     """ uploads a single event to google sheets
 
     """
@@ -25,7 +25,7 @@ def upload(time, event_type):
     ValueRange = {}
     ValueRange["range"]=consts.RANGE
     ValueRange["majorDimension"]="ROWS"
-    ValueRange["values"]=[[time, event_type]]
+    ValueRange["values"]=[[event.datetime, event.event_type]]
     result = service.spreadsheets().values().append(
         spreadsheetId=consts.ID, range=consts.RANGE, valueInputOption='USER_ENTERED', body=ValueRange).execute()
     print(result)

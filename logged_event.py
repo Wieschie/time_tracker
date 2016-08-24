@@ -2,9 +2,9 @@ import datetime
 
 class event(object):
     
-    def __init__(self, event_type):
-        self.time = datetime.datetime.now().isoformat()
-        self.event_type = event_type
+    def __init__(self, type):
+        self.datetime = datetime.datetime.utcnow().isoformat()
+        self.type = type
         # no tags for now
         #self.tag = tag
     

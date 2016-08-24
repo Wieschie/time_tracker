@@ -9,8 +9,7 @@ from oauth2client import tools
 
 # takes an event and records it in a google sheet
 def record_event_sheets(e):
-    print(e.__dict__)
-    upload(e.time, e.event_type)
+    upload(e)
     
 
 if __name__ == '__main__':
