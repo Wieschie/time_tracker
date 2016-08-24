@@ -1,6 +1,10 @@
 import argparse
+from datetime import datetime
+
+from TimeAction import TimeAction
 import logged_event
 from sheets_upload import upload
+
 
 from apiclient import discovery
 import oauth2client
@@ -23,12 +27,18 @@ if __name__ == '__main__':
     parser = argparse.ArgumentParser(description='Track time spent on your computer.')
 
     # get activity type
-    parser.add_argument('activity', choices=['g', 't', 'w', 'p', 'f'], default='g',
+    parser.add_argument('-activity', choices=['g', 't', 'w', 'p', 'f'], default='g',
                         help='type of activity: gaming, tv, work, or finish (end tracking)', metavar='activity')
+
+    # allow user to manually specify time
+    parser.add_argument('-t', dest='time', required=False, action=TimeAction,
+                        default=datetime.utcnow().replace(microsecond=0).isoformat(),
+                        help="Manually specify a start time in 'HHMM' format")
     
     flags = parser.parse_args()
     
-    e = logged_event.Event(flags.activity)
+    e = logged_event.Event(flags.activity, flags.time)
 
-    record_event_sheets(e)
-    record_event_local(str(e))
+    print(e)
+    # record_event_sheets(e)
+    # record_event_local(str(e))

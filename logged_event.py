@@ -1,9 +1,9 @@
-import datetime
+from datetime import datetime
 
 
 class Event(object):
     
-    def __init__(self, atype, dt=datetime.datetime.utcnow().isoformat()):
+    def __init__(self, atype, dt):
         self.datetime = dt
         self.activity_type = atype
 

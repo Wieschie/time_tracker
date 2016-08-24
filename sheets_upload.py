@@ -10,17 +10,15 @@ import consts
 
 
 def upload(event):
-    """ uploads a single event to google sheets
+    # uploads a single event to google sheets
 
-    """
-    
     credentials = get_credentials()
     http = credentials.authorize(httplib2.Http())
     discoveryUrl = ('https://sheets.googleapis.com/$discovery/rest?'
                     'version=v4')
     service = discovery.build('sheets', 'v4', http=http,
                               discoveryServiceUrl=discoveryUrl)
-    
+    # build the request body
     ValueRange = {
         "range": consts.RANGE,
         "majorDimension": "ROWS",
@@ -33,8 +31,11 @@ def upload(event):
 
 
 def get_credentials():
-    """Gets valid user credentials from storage.
+    """ Taken from Google's quick start script
 
+    Gets valid user credentials from storage.
+
+    CURRENTLY DOES NOT WORK:
     If nothing has been stored, or if the stored credentials are invalid,
     the OAuth2 flow is completed to obtain the new credentials.
 
