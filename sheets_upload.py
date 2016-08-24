@@ -52,14 +52,17 @@ def get_credentials():
 
     store = oauth2client.file.Storage(credential_path)
     credentials = store.get()
-    if not credentials or credentials.invalid:
-        flow = client.flow_from_clientsecrets(CLIENT_SECRET_FILE, SCOPES)
-        flow.user_agent = APPLICATION_NAME
-        if flags:
-            credentials = tools.run_flow(flow, store, flags)
-        else: # Needed only for compatibility with Python 2.6
-            credentials = tools.run(flow, store)
-        print('Storing credentials to ' + credential_path)
+    if not credentials:
+        raise Exception("Credentials have not been set up on this machine.")
+    elif credentials.invalid:
+        raise Exception("Credentials are invalid.")
+#        flow = client.flow_from_clientsecrets(CLIENT_SECRET_FILE, SCOPES)
+#        flow.user_agent = APPLICATION_NAME
+#        if flags:
+#            credentials = tools.run_flow(flow, store, flags)
+#        else: # Needed only for compatibility with Python 2.6
+#        credentials = tools.run(flow, store)
+#        print('Storing credentials to ' + credential_path)
     return credentials
 
 
