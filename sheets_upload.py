@@ -28,6 +28,7 @@ def upload(event):
     }
     result = service.spreadsheets().values().append(
         spreadsheetId=consts.ID, range=consts.RANGE, valueInputOption='USER_ENTERED', body=ValueRange).execute()
+    # @TODO parse API response and provide nicer output
     print(result)
 
 

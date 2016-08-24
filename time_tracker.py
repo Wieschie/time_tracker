@@ -23,12 +23,12 @@ if __name__ == '__main__':
     parser = argparse.ArgumentParser(description='Track time spent on your computer.')
 
     # get activity type
-    parser.add_argument('activity', choices=['g', 't', 'w', 'f'], default='g',
+    parser.add_argument('activity', choices=['g', 't', 'w', 'p', 'f'], default='g',
                         help='type of activity: gaming, tv, work, or finish (end tracking)', metavar='activity')
     
     flags = parser.parse_args()
     
     e = logged_event.Event(flags.activity)
 
-    # record_event_sheets(e)
+    record_event_sheets(e)
     record_event_local(str(e))
