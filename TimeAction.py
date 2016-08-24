@@ -12,13 +12,19 @@ class TimeAction(Action):
     def __call__(self, parser, namespace, values, option_string=None):
         try:
             d = datetime.strptime(values, "%H%M")
-        except ValueError:
+        except ValueError as e:
             print("Invalid time entered.")
             exit()
 
         # Only accepts HHMM from user, so add current date to event
         n = datetime.now()
         d = d.replace(year=n.year, month=n.month, day=n.day)
+        try:
+            if d > datetime.now():
+                raise ValueError("Please enter a time in the past.")
+        except ValueError as e:
+            print(e)
+            exit()
 
         # save newly created datetime
         setattr(namespace, self.dest, str(d))
