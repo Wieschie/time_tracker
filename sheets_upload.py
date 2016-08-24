@@ -1,7 +1,5 @@
 import httplib2
 import os
-import json
-from collections import OrderedDict
 
 from apiclient import discovery
 import oauth2client
@@ -9,6 +7,7 @@ from oauth2client import client
 from oauth2client import tools
 
 import consts
+
 
 def upload(event):
     """ uploads a single event to google sheets
@@ -22,14 +21,16 @@ def upload(event):
     service = discovery.build('sheets', 'v4', http=http,
                               discoveryServiceUrl=discoveryUrl)
     
-    ValueRange = {}
-    ValueRange["range"]=consts.RANGE
-    ValueRange["majorDimension"]="ROWS"
-    ValueRange["values"]=[[event.datetime, event.event_type]]
+    ValueRange = {
+        "range": consts.RANGE,
+        "majorDimension": "ROWS",
+        "values": [[event.datetime, event.activity_type]]
+    }
     result = service.spreadsheets().values().append(
         spreadsheetId=consts.ID, range=consts.RANGE, valueInputOption='USER_ENTERED', body=ValueRange).execute()
     print(result)
-    
+
+
 def get_credentials():
     """Gets valid user credentials from storage.
 
@@ -40,10 +41,6 @@ def get_credentials():
         Credentials, the obtained credential.
     """
 
-    SCOPES = 'https://www.googleapis.com/auth/spreadsheets'
-    CLIENT_SECRET_FILE = 'client_secret.json'
-    APPLICATION_NAME = consts.APP_NAME
-    
     home_dir = os.path.expanduser('~')
     credential_dir = os.path.join(home_dir, '.credentials')
     if not os.path.exists(credential_dir):
@@ -58,7 +55,3 @@ def get_credentials():
     elif credentials.invalid:
         raise Exception("Credentials are invalid.")
     return credentials
-
-
-
-

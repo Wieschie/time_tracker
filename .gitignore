@@ -3,3 +3,4 @@ quickstart.py
 __pycache__
 *~
 time.log
+.idea/
