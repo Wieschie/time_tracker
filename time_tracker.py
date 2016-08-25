@@ -27,7 +27,7 @@ if __name__ == '__main__':
     parser = argparse.ArgumentParser(description='Track time spent on your computer.')
 
     # get activity type
-    parser.add_argument('-activity', default='g',
+    parser.add_argument('activity', default='g', nargs='?',
                         help='type of activity: gaming, tv, work, or finish (end tracking)', metavar='activity')
 
     # allow user to manually specify time
