@@ -7,9 +7,10 @@ from oauth2client import client
 from oauth2client import tools
 
 import consts
+from logged_event import Event
 
 
-def upload(event):
+def upload(event: Event) -> object:
     # uploads a single event to google sheets
 
     credentials = get_credentials()
@@ -19,13 +20,13 @@ def upload(event):
     service = discovery.build('sheets', 'v4', http=http,
                               discoveryServiceUrl=discoveryUrl)
     # build the request body
-    ValueRange = {
+    value_range = {
         "range": consts.RANGE,
         "majorDimension": "ROWS",
         "values": [[event.datetime, event.activity_type]]
     }
     result = service.spreadsheets().values().append(
-        spreadsheetId=consts.ID, range=consts.RANGE, valueInputOption='USER_ENTERED', body=ValueRange).execute()
+        spreadsheetId=consts.ID, range=consts.RANGE, valueInputOption='USER_ENTERED', body=value_range).execute()
     # @TODO parse API response and provide nicer output
     print(result)
 
