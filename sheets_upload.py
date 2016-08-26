@@ -23,7 +23,7 @@ def upload(event: Event) -> object:
     value_range = {
         "range": consts.RANGE,
         "majorDimension": "ROWS",
-        "values": [[event.datetime, event.activity_type]]
+        "values": [[event.get_datetime(), event.activity_type]]
     }
     result = service.spreadsheets().values().append(
         spreadsheetId=consts.ID, range=consts.RANGE, valueInputOption='USER_ENTERED', body=value_range).execute()

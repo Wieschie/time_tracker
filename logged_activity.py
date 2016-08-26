@@ -1,9 +1,10 @@
 from logged_event import Event
+from datetime import datetime
 
 
 class Activity(Event):
 
-    def __init__(self, dt, atype, duration):
+    def __init__(self, dt: datetime, atype: str, duration: time):
         super(Activity, self).__init__(dt, atype)
         self.duration = duration
 

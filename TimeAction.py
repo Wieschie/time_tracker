@@ -17,14 +17,14 @@ class TimeAction(Action):
             exit()
 
         # Only accepts HHMM from user, so add current date to event
-        n = datetime.now()
+        n = datetime.utcnow()
         d = d.replace(year=n.year, month=n.month, day=n.day)
         try:
-            if d > datetime.now():
+            if d > datetime.utcnow():
                 raise ValueError("Please enter a time in the past.")
         except ValueError as e:
             print(e)
             exit()
 
         # save newly created datetime
-        setattr(namespace, self.dest, str(d))
+        setattr(namespace, self.dest, d)
