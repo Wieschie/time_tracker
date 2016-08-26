@@ -1,12 +1,6 @@
 import argparse
 from datetime import datetime
 
-# Google Sheets API modules
-from apiclient import discovery
-import oauth2client
-from oauth2client import client
-from oauth2client import tools
-
 # project modules
 from TimeAction import TimeAction
 from logged_event import Event
@@ -25,7 +19,7 @@ def record_event_local(event: Event):
     
 
 if __name__ == '__main__':
-    ### argument parsing
+    # ---- argument parsing -----
     parser = argparse.ArgumentParser(description='Track time spent on your computer.')
     # get activity type
     parser.add_argument('activity', default='g', nargs='?',
