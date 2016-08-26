@@ -4,7 +4,7 @@ from datetime import datetime, timedelta
 
 class Activity(Event):
 
-    def __init__(self, dt_begin: datetime, activity_type: str, dt_end: datetime):
+    def __init__(self, dt_begin: datetime, dt_end: datetime, activity_type: str):
         super(Activity, self).__init__(dt_begin, activity_type)
         self.dt_end = dt_end
 
