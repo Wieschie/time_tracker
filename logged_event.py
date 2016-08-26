@@ -8,7 +8,7 @@ class Event(object):
         self.activity_type = activity_type
 
     def __str__(self):
-        return self.get_datetime() + ", " + self.activity_type
+        return self.get_datetime() + "," + self.activity_type
 
     # returns datetime as an iso formatted string.  Microseconds just aren't important to me.
     def get_datetime(self) -> str:
