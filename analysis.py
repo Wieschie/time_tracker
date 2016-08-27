@@ -1,4 +1,6 @@
 from datetime import datetime, timedelta
+import pytz
+from tzlocal import get_localzone
 from collections import defaultdict, Counter
 
 from logged_activity import Activity
@@ -6,7 +8,6 @@ from logged_activity import Activity
 
 # start working with local file only
 def parse_activities():
-    # TODO implement some sort of log rotation and caching each time analysis is run
     # load time.log using list comprehension!
     f = open("time.log", 'r')
     # split incoming strings into tuple(datetime, activity_type).  datetime str is a fixed length -> just use indexes
@@ -19,17 +20,26 @@ def parse_activities():
     for i, event in enumerate(data):
         # don't treat the last event in the log as the start of an activity.
         # events tagged 'f' are just the user logging off.  Do not treat as the start of a new activity
-        if i != len(data) - 1 and event[1] is not 'f':
-            dt_begin = datetime.strptime(event[0], "%Y-%m-%dT%H:%M:%S")
-            dt_end = datetime.strptime(data[i+1][0], "%Y-%m-%dT%H:%M:%S")
+        if event[1] is not 'f':
+            # TODO all datetimes are stored in UTC. store tzinfo?
+            # Convert to local timezone.  credit to:
+            # http://stackoverflow.com/a/18569497/1706825
+            # http://stackoverflow.com/a/4530166/1706825
+            local_tz = get_localzone()
+            fmt = "%Y-%m-%dT%H:%M:%S"
+            dt_begin = datetime.strptime(event[0], fmt).replace(tzinfo=pytz.utc).astimezone(local_tz)
+            if i != len(data) - 1:
+                dt_end = datetime.strptime(data[i+1][0], fmt).replace(tzinfo=pytz.utc).astimezone(local_tz)
+            # the last event isn't marked as 'f', so it's ongoing.  We can total the time up until now.
+            else:
+                dt_end = datetime.now().replace(microsecond=0, tzinfo=local_tz)
             activity_type = event[1]
             activities.append(Activity(dt_begin, dt_end, activity_type))
 
     # group activities into days
     days = defaultdict(list)
     for a in activities:
-    	# TODO convert back to local timezone here?  should I be storing timezone data as well?
-	days[a.get_date()].append(a)
+        days[a.get_date()].append(a)
 
     # combine multiple occurrences of an activity within each day to get a total time per activity per day
     days_totaled = defaultdict(lambda: Counter())
