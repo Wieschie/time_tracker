@@ -12,6 +12,17 @@ class Activity(Event):
     def __str__(self):
         return super(Activity, self).__str__() + "," + self.dt_end
 
+    # adding two activities just checks to make sure the tag is the same and then returns total duration
+    def __add__(self, other) -> timedelta:
+        if isinstance(other, Activity):
+            if self.activity_type != other.activity_type:
+                raise UserWarning("Activity types do not match.  Are you sure you want to add them?")
+            return self.get_duration() + other.get_duration()
+        if isinstance(other, timedelta):
+            return self.get_duration() + other
+        else:
+            return NotImplemented
+
     def get_duration(self) -> timedelta:
         return self.dt_end - self.dt_begin
 
