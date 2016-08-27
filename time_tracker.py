@@ -1,5 +1,6 @@
 import argparse
 from datetime import datetime
+import sys
 
 # project modules
 from TimeAction import TimeAction
@@ -13,7 +14,8 @@ def record_event_sheets(event: Event):
 
 
 def record_event_local(event: Event):
-    f = open('time.log', 'a')
+    # sys.path[0] is the directory of this script.  http://stackoverflow.com/a/5475224/1706825
+    f = open(sys.path[0] + 'time.log', 'a')
     f.write(str(event) + '\n')
     f.close()
     
@@ -34,7 +36,7 @@ if __name__ == '__main__':
 
     # create and record the event.
     e = Event(flags.time, flags.activity)
-    print("Logging activity: '" + e.activity_type + "' at " + e.get_datetime())
+    print("Logging activity: '" + e.activity_type + "' at " + e.get_datetime_begin())
     if not flags.test:
         record_event_sheets(e)
         record_event_local(e)
