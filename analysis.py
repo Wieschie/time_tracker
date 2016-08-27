@@ -28,7 +28,8 @@ def parse_activities():
     # group activities into days
     days = defaultdict(list)
     for a in activities:
-        days[a.get_date()].append(a)
+    	# TODO convert back to local timezone here?  should I be storing timezone data as well?
+	days[a.get_date()].append(a)
 
     # combine multiple occurrences of an activity within each day to get a total time per activity per day
     days_totaled = defaultdict(lambda: Counter())
