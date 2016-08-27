@@ -34,6 +34,8 @@ def parse_activities():
     days_totaled = defaultdict(lambda: Counter())
     for day in days:
         for a in days[day]:
+            # TODO use activity addition here? might work without changes to Activity
+            # https://docs.python.org/3/reference/datamodel.html#object.__iadd__
             days_totaled[day][a.activity_type] += a.get_duration().total_seconds()
 
     # print out a summary of activity totals per day
