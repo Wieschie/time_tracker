@@ -1,4 +1,5 @@
-from datetime import datetime
+from datetime import datetime, timedelta
+from collections import defaultdict, Counter
 
 from logged_activity import Activity
 
@@ -9,7 +10,7 @@ def parse_activities():
     # load time.log using list comprehension!
     f = open("time.log", 'r')
     # split incoming strings into tuple(datetime, activity_type).  datetime str is a fixed length -> just use indexes
-    data = [(line.strip()[:19], line.strip()[21:]) for line in f]
+    data = [(line.strip()[:19], line.strip()[20:]) for line in f]
     f.close()
 
     # until we hit an event tagged 'f', each time gap in events measures the duration of a certain activity
@@ -24,9 +25,25 @@ def parse_activities():
             activity_type = event[1]
             activities.append(Activity(dt_begin, dt_end, activity_type))
 
-    print("Activity type, duration (MM:SS):")
+    # group activities into days
+    days = defaultdict(list)
     for a in activities:
-        print(a.activity_type + ", %d:%d" % divmod(a.get_duration().total_seconds(), 60))
+        days[a.get_date()].append(a)
+
+    # combine multiple occurrences of an activity within each day to get a total time per activity per day
+    days_totaled = defaultdict(lambda: Counter())
+    for day in days:
+        for a in days[day]:
+            days_totaled[day][a.activity_type] += a.get_duration().total_seconds()
+
+    # print out a summary of activity totals per day
+    for day in days_totaled:
+        print(day.isoformat() + ":")
+        for activity in days_totaled[day]:
+            # days_totaled[day][activity] is length of a given activity in seconds.
+            # Using timedelta to convert to HH:MM:SS
+            print('\t' + '{:8s} {:8s}'.format(str(activity) + ": ",
+                  str((datetime(1970, 1, 1) + timedelta(seconds=days_totaled[day][activity])).time())))
 
 
 # TODO fill stub
