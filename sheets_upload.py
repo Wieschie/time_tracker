@@ -27,8 +27,11 @@ def upload(event: Event) -> object:
     }
     result = service.spreadsheets().values().append(
         spreadsheetId=consts.ID, range=consts.RANGE, valueInputOption='USER_ENTERED', body=value_range).execute()
-    # @TODO parse API response and provide nicer output
-    print(result)
+
+    # TODO - figure out failure response from API and handle it
+    # sample result: {'spreadsheetId': 'id', 'tableRange': 'experimental!A1:B57', 'updates': {'spreadsheetId': 'id',
+    # 'updatedRange': 'experimental!A58:B58', 'updatedRows': 1, 'updatedCells': 2, 'updatedColumns': 2}}
+    print(str(result['updates']['updatedRows']) + " rows updated in Google Sheets.")
 
 
 def get_credentials():
