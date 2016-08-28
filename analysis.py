@@ -1,7 +1,8 @@
+from collections import defaultdict
 from datetime import datetime, timedelta
+
 import pytz
 from tzlocal import get_localzone
-from collections import defaultdict, Counter
 
 from logged_activity import Activity
 

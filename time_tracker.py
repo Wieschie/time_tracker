@@ -1,8 +1,7 @@
 import argparse
-from datetime import datetime
 import sys
+from datetime import datetime
 
-# project modules
 from TimeAction import TimeAction
 from logged_event import Event
 from sheets_upload import upload
@@ -36,7 +35,7 @@ if __name__ == '__main__':
 
     # create and record the event.
     e = Event(flags.time, flags.activity)
-    print("Logging activity: '" + e.activity_type + "' at " + e.get_datetime_begin())
+    print("Logging activity: '" + e.activity_type + "' at " + e.get_datetime_begin() + "UTC")
     if not flags.test:
         record_event_sheets(e)
         record_event_local(e)
