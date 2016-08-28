@@ -36,6 +36,7 @@ def parse_activities():
             activity_type = event[1]
             activities.append(Activity(dt_begin, dt_end, activity_type))
 
+    # TODO split into separate functions?
     # group activities into days
     days = defaultdict(list)
     for a in activities:
