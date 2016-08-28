@@ -6,10 +6,10 @@ from collections import defaultdict, Counter
 from logged_activity import Activity
 
 
-# start working with local file only
-def parse_time_log() -> list:
-    # load time.log using list comprehension!
+def parse_time_log() -> list(Activity):
+    """ Parses the local time.log file and returns a list of Activity objects (one per line) """
     f = open("time.log", 'r')
+    # load time.log using list comprehension!
     # split incoming strings into tuple(datetime, activity_type).  datetime str is a fixed length -> just use indexes
     data = [(line.strip()[:19], line.strip()[20:]) for line in f]
     f.close()
@@ -38,12 +38,8 @@ def parse_time_log() -> list:
     return activities
 
 
-# TODO fill stub
-def last_event():
-    return
-
-
-def print_day_summary(activities):
+def get_days_totaled(activities: list(Activity)) -> defaultdict(defaultdict(timedelta)):
+    """ Sums all instances of each activity in a day and returns as a {day: {activity_type: duration}} defaultdict """
     # group activities into days
     days = defaultdict(list)
     for a in activities:
@@ -58,7 +54,11 @@ def print_day_summary(activities):
             # TODO use activity addition here? might work without changes to Activity
             # https://docs.python.org/3/reference/datamodel.html#object.__iadd__
             days_totaled[day][a.activity_type] += a.get_duration()
+    return days_totaled
 
+
+def print_day_summary(activities: list):
+    days_totaled = get_days_totaled(activities)
     # print out a summary of activity totals per day
     for day in days_totaled:
         print(day.isoformat() + ":")
@@ -66,8 +66,6 @@ def print_day_summary(activities):
         for activity in days_totaled[day]:
             # days_totaled[day][activity] is length of a given activity in seconds.
             # Using timedelta to convert to HH:MM:SS
-            #print('\t' + '{:8s} {:8s}'.format(str(activity) + ": ",
-            #      str((datetime(1970, 1, 1) + timedelta(seconds=days_totaled[day][activity])).time())))
             print('\t' + '{:8s} {:8s}'.format(str(activity) + ": ",
                                               str((datetime(1970, 1, 1) + days_totaled[day][activity]).time())))
 
