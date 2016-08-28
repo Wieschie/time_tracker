@@ -7,7 +7,7 @@ from logged_activity import Activity
 
 
 # start working with local file only
-def parse_activities():
+def parse_time_log() -> list:
     # load time.log using list comprehension!
     f = open("time.log", 'r')
     # split incoming strings into tuple(datetime, activity_type).  datetime str is a fixed length -> just use indexes
@@ -50,25 +50,29 @@ def print_day_summary(activities):
         days[a.get_date()].append(a)
 
     # combine multiple occurrences of an activity within each day to get a total time per activity per day
-    days_totaled = defaultdict(lambda: Counter())
+    # lambda is required because defaultdict needs a callable.
+    # dictionary elements look like {day(str): {activity_type(str): duration(timedelta}}
+    days_totaled = defaultdict(lambda: defaultdict(lambda: timedelta()))
     for day in days:
         for a in days[day]:
             # TODO use activity addition here? might work without changes to Activity
             # https://docs.python.org/3/reference/datamodel.html#object.__iadd__
-            days_totaled[day][a.activity_type] += a.get_duration().total_seconds()
+            days_totaled[day][a.activity_type] += a.get_duration()
 
     # print out a summary of activity totals per day
     for day in days_totaled:
         print(day.isoformat() + ":")
+
         for activity in days_totaled[day]:
             # days_totaled[day][activity] is length of a given activity in seconds.
             # Using timedelta to convert to HH:MM:SS
+            #print('\t' + '{:8s} {:8s}'.format(str(activity) + ": ",
+            #      str((datetime(1970, 1, 1) + timedelta(seconds=days_totaled[day][activity])).time())))
             print('\t' + '{:8s} {:8s}'.format(str(activity) + ": ",
-                  str((datetime(1970, 1, 1) + timedelta(seconds=days_totaled[day][activity])).time())))
-
+                                              str((datetime(1970, 1, 1) + days_totaled[day][activity]).time())))
 
 if __name__ == '__main__':
-    activity_list = parse_activities()
+    activity_list = parse_time_log()
     print_day_summary(activity_list)
 
 
