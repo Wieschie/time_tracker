@@ -35,8 +35,15 @@ def parse_activities():
                 dt_end = datetime.now().replace(microsecond=0, tzinfo=local_tz)
             activity_type = event[1]
             activities.append(Activity(dt_begin, dt_end, activity_type))
+    return activities
 
-    # TODO split into separate functions?
+
+# TODO fill stub
+def last_event():
+    return
+
+
+def print_day_summary(activities):
     # group activities into days
     days = defaultdict(list)
     for a in activities:
@@ -60,9 +67,8 @@ def parse_activities():
                   str((datetime(1970, 1, 1) + timedelta(seconds=days_totaled[day][activity])).time())))
 
 
-# TODO fill stub
-def last_event():
-    return
-
 if __name__ == '__main__':
-    parse_activities()
+    activity_list = parse_activities()
+    print_day_summary(activity_list)
+
+
