@@ -3,18 +3,20 @@ import sys
 from datetime import datetime
 
 from TimeAction import TimeAction
+from ActivityAction import ActivityAction
 from logged_event import Event
 from sheets_upload import upload
 
 
-# takes an event and records it in a google sheet
 def record_event_sheets(event: Event):
+    """ appends the event to a google sheet """
     upload(event)
 
 
 def record_event_local(event: Event):
+    """ writes event in plaintext to a local logfile """
     # sys.path[0] is the directory of this script.  http://stackoverflow.com/a/5475224/1706825
-    f = open(sys.path[0] + 'time.log', 'a')
+    f = open(sys.path[0] + '/time.log', 'a')
     f.write(str(event) + '\n')
     f.close()
     
@@ -23,8 +25,7 @@ if __name__ == '__main__':
     # ---- argument parsing -----
     parser = argparse.ArgumentParser(description='Track time spent on your computer.')
     # get activity type
-    parser.add_argument('activity', default='g', nargs='?',
-                        help='type of activity: gaming, tv, work, or finish (end tracking)', metavar='activity')
+    parser.add_argument('activity', nargs='?', help='type of activity', action=ActivityAction)
     # allow user to manually specify time
     parser.add_argument('-t', dest='time', required=False, action=TimeAction,
                         default=datetime.utcnow(),

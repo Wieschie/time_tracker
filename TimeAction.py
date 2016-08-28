@@ -17,7 +17,7 @@ class TimeAction(Action):
     def __call__(self, parser, namespace, values, option_string=None):
         try:
             d = datetime.strptime(values, "%H%M")
-        except ValueError as e:
+        except ValueError:
             print("Invalid time entered.")
             exit()
 

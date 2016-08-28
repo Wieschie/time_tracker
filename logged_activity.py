@@ -13,6 +13,7 @@ class Activity(Event):
         return super(Activity, self).__str__() + "," + self.dt_end
 
     # adding two activities just checks to make sure the tag is the same and then returns total duration
+    # TODO make this useful or delete it
     def __add__(self, other) -> timedelta:
         if isinstance(other, Activity):
             if self.activity_type != other.activity_type:
