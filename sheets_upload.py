@@ -15,10 +15,10 @@ def upload(event: Event) -> object:
 
     credentials = get_credentials()
     http = credentials.authorize(httplib2.Http())
-    discoveryUrl = ('https://sheets.googleapis.com/$discovery/rest?'
+    discovery_url = ('https://sheets.googleapis.com/$discovery/rest?'
                     'version=v4')
     service = discovery.build('sheets', 'v4', http=http,
-                              discoveryServiceUrl=discoveryUrl)
+                              discoveryServiceUrl=discovery_url)
     # build the request body
     value_range = {
         "range": consts.RANGE,

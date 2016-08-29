@@ -7,7 +7,7 @@ from tzlocal import get_localzone
 from logged_activity import Activity
 
 
-def parse_time_log() -> list(Activity):
+def parse_time_log() -> list:
     """ Parses the local time.log file and returns a list of Activity objects (one per line) """
     f = open("time.log", 'r')
     # load time.log using list comprehension!
@@ -39,7 +39,7 @@ def parse_time_log() -> list(Activity):
     return activities
 
 
-def get_days_totaled(activities: list(Activity)) -> defaultdict(defaultdict(timedelta)):
+def get_days_totaled(activities: list) -> defaultdict(lambda: defaultdict(lambda: timedelta())):
     """ Sums all instances of each activity in a day and returns as a {day: {activity_type: duration}} defaultdict """
     # group activities into days
     days = defaultdict(list)
@@ -70,8 +70,7 @@ def print_day_summary(activities: list):
             print('\t' + '{:8s} {:8s}'.format(str(activity) + ": ",
                                               str((datetime(1970, 1, 1) + days_totaled[day][activity]).time())))
 
+
 if __name__ == '__main__':
     activity_list = parse_time_log()
     print_day_summary(activity_list)
-
-
