@@ -33,4 +33,4 @@ class TimeAction(Action):
             exit()
 
         # save newly created datetime
-        setattr(namespace, self.dest, d.astimezone(pytz.utc))
+        setattr(namespace, self.dest, d.astimezone(pytz.utc).replace(tzinfo=None))
