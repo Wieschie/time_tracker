@@ -1,4 +1,4 @@
-from collections import defaultdict
+from collections import defaultdict, OrderedDict
 from datetime import datetime, timedelta
 
 import pytz
@@ -45,8 +45,9 @@ def get_days_totaled(activities: list) -> defaultdict(lambda: defaultdict(lambda
     days = defaultdict(list)
     for a in activities:
         days[a.get_date()].append(a)
-
     # combine multiple occurrences of an activity within each day to get a total time per activity per day
+    # TODO want to use OrderedDict for the outer container as dates are already in order.  But it doesn't support
+    # nesting.  Eztend it myself?
     # lambda is required because defaultdict needs a callable.
     # dictionary elements look like {day(str): {activity_type(str): duration(timedelta}}
     days_totaled = defaultdict(lambda: defaultdict(lambda: timedelta()))
@@ -59,9 +60,11 @@ def get_days_totaled(activities: list) -> defaultdict(lambda: defaultdict(lambda
 
 
 def print_day_summary(activities: list):
+    """ print out a summary of activity totals per day """
     days_totaled = get_days_totaled(activities)
-    # print out a summary of activity totals per day
-    for day in days_totaled:
+    # this results in a sorted list of the days.
+    sorted_days = sorted(days_totaled)
+    for day in sorted_days:
         print(day.isoformat() + ":")
 
         for activity in days_totaled[day]:
@@ -69,6 +72,7 @@ def print_day_summary(activities: list):
             # Using timedelta to convert to HH:MM:SS
             print('\t' + '{:8s} {:8s}'.format(str(activity) + ": ",
                                               str((datetime(1970, 1, 1) + days_totaled[day][activity]).time())))
+        print()
 
 
 if __name__ == '__main__':
