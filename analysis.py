@@ -1,4 +1,6 @@
-from collections import defaultdict, OrderedDict
+import argpase
+
+from collections import defaultdict
 from datetime import datetime, timedelta
 
 import pytz
@@ -40,14 +42,14 @@ def parse_time_log() -> list:
 
 
 def get_days_totaled(activities: list) -> defaultdict(lambda: defaultdict(lambda: timedelta())):
-    """ Sums all instances of each activity in a day and returns as a {day: {activity_type: duration}} defaultdict """
+    """ Sums all instances of each activity in a day and returns as a {day: {activity_type: duration}} """
     # group activities into days
     days = defaultdict(list)
     for a in activities:
         days[a.get_date()].append(a)
     # combine multiple occurrences of an activity within each day to get a total time per activity per day
     # TODO want to use OrderedDict for the outer container as dates are already in order.  But it doesn't support
-    # nesting.  Eztend it myself?
+    # nesting.  Extend it myself?
     # lambda is required because defaultdict needs a callable.
     # dictionary elements look like {day(str): {activity_type(str): duration(timedelta}}
     days_totaled = defaultdict(lambda: defaultdict(lambda: timedelta()))
@@ -59,12 +61,14 @@ def get_days_totaled(activities: list) -> defaultdict(lambda: defaultdict(lambda
     return days_totaled
 
 
-def print_day_summary(activities: list):
+def print_day_summary(activities: list, last_n_days=None):
     """ print out a summary of activity totals per day """
+    if type(last_n_days) is int:
+        last_n_days *= -1
     days_totaled = get_days_totaled(activities)
     # this results in a sorted list of the days.
     sorted_days = sorted(days_totaled)
-    for day in sorted_days:
+    for day in sorted_days[:last_n_days]:
         print(day.isoformat() + ":")
 
         for activity in days_totaled[day]:
@@ -76,5 +80,7 @@ def print_day_summary(activities: list):
 
 
 if __name__ == '__main__':
+    # TODO parse some args
+
     activity_list = parse_time_log()
     print_day_summary(activity_list)
