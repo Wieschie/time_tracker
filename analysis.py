@@ -69,14 +69,19 @@ def print_day_summary(activities: list, last_n_days=None):
     # this results in a sorted list of the days.
     sorted_days = sorted(days_totaled)
     for day in sorted_days[last_n_days:]:
-        print(day.isoformat() + ":")
+        print(day.strftime("%a %b %d") + ":")
 
+        dt_zero = datetime(1970, 1, 1)
+        total = dt_zero
         for activity in days_totaled[day]:
             # days_totaled[day][activity] is length of a given activity in seconds.
             # Using timedelta to convert to HH:MM:SS
-            print('\t' + '{:8s} {:8s}'.format(str(activity) + ": ",
-                                              str((datetime(1970, 1, 1) + days_totaled[day][activity]).time())))
-        print()
+            t = days_totaled[day][activity]
+            total += t
+            print('\t{:8s} {:8s}'.format(str(activity) + ": ",
+                                         str((dt_zero + t).time())))
+        print("\t" + '-' * 17)
+        print("\ttotal:   " + str(total.time()) + '\n')
 
 
 if __name__ == '__main__':
