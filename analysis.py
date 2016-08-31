@@ -1,4 +1,4 @@
-import argpase
+import argparse
 
 from collections import defaultdict
 from datetime import datetime, timedelta
@@ -68,7 +68,7 @@ def print_day_summary(activities: list, last_n_days=None):
     days_totaled = get_days_totaled(activities)
     # this results in a sorted list of the days.
     sorted_days = sorted(days_totaled)
-    for day in sorted_days[:last_n_days]:
+    for day in sorted_days[last_n_days:]:
         print(day.isoformat() + ":")
 
         for activity in days_totaled[day]:
@@ -81,6 +81,8 @@ def print_day_summary(activities: list, last_n_days=None):
 
 if __name__ == '__main__':
     # TODO parse some args
-
+    parser = argparse.ArgumentParser(description='Analyze time.log.')
+    parser.add_argument('-n', dest='last_n_days', help="Display a summary of the last n days.", type=int, default=None)
+    flags = parser.parse_args()
     activity_list = parse_time_log()
-    print_day_summary(activity_list)
+    print_day_summary(activity_list, flags.last_n_days)
