@@ -1,12 +1,13 @@
 import argparse
-
 from collections import defaultdict
 from datetime import datetime, timedelta
 
 import pytz
 from tzlocal import get_localzone
 
+from consts import DT_ZERO
 from logged_activity import Activity
+from day_summary import Day
 
 
 def parse_time_log() -> list:
@@ -41,7 +42,7 @@ def parse_time_log() -> list:
     return activities
 
 
-def get_days_totaled(activities: list) -> defaultdict(lambda: defaultdict(lambda: timedelta())):
+def get_days_totaled(activities: list) -> defaultdict(lambda: Day):
     """ Sums all instances of each activity in a day and returns as a {day: {activity_type: duration}} """
     # group activities into days
     days = defaultdict(list)
@@ -52,12 +53,10 @@ def get_days_totaled(activities: list) -> defaultdict(lambda: defaultdict(lambda
     # nesting.  Extend it myself?
     # lambda is required because defaultdict needs a callable.
     # dictionary elements look like {day(str): {activity_type(str): duration(timedelta}}
-    days_totaled = defaultdict(lambda: defaultdict(lambda: timedelta()))
+    days_totaled = defaultdict(lambda: Day())
     for day in days:
         for a in days[day]:
-            # TODO use activity addition here? might work without changes to Activity
-            # https://docs.python.org/3/reference/datamodel.html#object.__iadd__
-            days_totaled[day][a.activity_type] += a.get_duration()
+            days_totaled[day].add_activity(a.activity_type, a.get_duration())
     return days_totaled
 
 
@@ -70,18 +69,7 @@ def print_day_summary(activities: list, last_n_days=None):
     sorted_days = sorted(days_totaled)
     for day in sorted_days[last_n_days:]:
         print(day.strftime("%a %b %d") + ":")
-
-        dt_zero = datetime(1970, 1, 1)
-        total = dt_zero
-        for activity in days_totaled[day]:
-            # days_totaled[day][activity] is length of a given activity in seconds.
-            # Using timedelta to convert to HH:MM:SS
-            t = days_totaled[day][activity]
-            total += t
-            print('\t{:8s} {:8s}'.format(str(activity) + ": ",
-                                         str((dt_zero + t).time())))
-        print("\t" + '-' * 17)
-        print("\ttotal:   " + str(total.time()) + '\n')
+        print(day)
 
 
 if __name__ == '__main__':
