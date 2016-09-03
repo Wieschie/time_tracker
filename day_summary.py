@@ -1,5 +1,5 @@
 from collections import defaultdict
-from datetime import datetime, timedelta
+from datetime import timedelta
 
 from consts import DT_ZERO
 
@@ -16,7 +16,9 @@ class Day(object):
 
     def __str__(self):
         output = str()
-        for a in self.activities:
+        # print out activities in alphabetical order.  Just ensures they're in the same order each day.
+        sorted_activities = sorted(self.activities)
+        for a in sorted_activities:
             output += '\t{:8s} {:8s}'.format(str(a) + ": ", str((DT_ZERO + self.activities[a]).time())) + '\n'
         output += "\t" + '-' * 17 + '\n'
         output += "\ttotal:   " + str(self.total_td.time()) + '\n'
