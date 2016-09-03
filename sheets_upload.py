@@ -3,8 +3,6 @@ import os
 
 from apiclient import discovery
 import oauth2client
-from oauth2client import client
-from oauth2client import tools
 
 import consts
 from logged_event import Event
@@ -16,7 +14,7 @@ def upload(event: Event) -> object:
     credentials = get_credentials()
     http = credentials.authorize(httplib2.Http())
     discovery_url = ('https://sheets.googleapis.com/$discovery/rest?'
-                    'version=v4')
+                     'version=v4')
     service = discovery.build('sheets', 'v4', http=http,
                               discoveryServiceUrl=discovery_url)
     # build the request body
