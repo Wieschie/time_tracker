@@ -17,7 +17,7 @@ class Day(object):
     def __str__(self):
         output = str()
         for a in self.activities:
-            output += ('\t{:8s} {:8s}'.format(str(a) + ": ", str((DT_ZERO + self.activities[a]).time())))
-        output += ("\n\t" + '-' * 17)
-        output += "\n\ttotal:   " + str(self.total_td.time()) + '\n'
+            output += '\t{:8s} {:8s}'.format(str(a) + ": ", str((DT_ZERO + self.activities[a]).time())) + '\n'
+        output += "\t" + '-' * 17 + '\n'
+        output += "\ttotal:   " + str(self.total_td.time()) + '\n'
         return output

@@ -65,11 +65,11 @@ def print_day_summary(activities: list, last_n_days=None):
     if type(last_n_days) is int:
         last_n_days *= -1
     days_totaled = get_days_totaled(activities)
-    # this results in a sorted list of the days.
+    # this results in a sorted list of datetimes.  Use this as a key to access days_totaled in sequential order.
     sorted_days = sorted(days_totaled)
     for day in sorted_days[last_n_days:]:
         print(day.strftime("%a %b %d") + ":")
-        print(day)
+        print(days_totaled[day])
 
 
 if __name__ == '__main__':
