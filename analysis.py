@@ -1,18 +1,16 @@
 import argparse
 from collections import defaultdict
-from datetime import datetime, timedelta
+from datetime import datetime
 
 import pytz
 from tzlocal import get_localzone
 
-from consts import DT_ZERO
 from logged_activity import Activity
 from day_summary import Day
 
 
-def parse_time_log() -> list:
+def parse_time_log(f) -> list:
     """ Parses the local time.log file and returns a list of Activity objects (one per line) """
-    f = open("time.log", 'r')
     # load time.log using list comprehension!
     # split incoming strings into tuple(datetime, activity_type).  datetime str is a fixed length -> just use indexes
     data = [(line.strip()[:19], line.strip()[20:]) for line in f]
@@ -77,5 +75,6 @@ if __name__ == '__main__':
     parser = argparse.ArgumentParser(description='Analyze time.log.')
     parser.add_argument('-n', dest='last_n_days', help="Display a summary of the last n days.", type=int, default=None)
     flags = parser.parse_args()
-    activity_list = parse_time_log()
+    log = open("time.log", 'r')
+    activity_list = parse_time_log(log)
     print_day_summary(activity_list, flags.last_n_days)
