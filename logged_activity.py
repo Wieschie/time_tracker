@@ -24,6 +24,12 @@ class Activity(Event):
         else:
             return NotImplemented
 
+    # used in testing
+    def __eq__(self, other):
+        return self.dt_begin == other.dt_begin \
+               and self.dt_end == other.dt_end \
+               and self.activity_type == other.activity_type
+
     # returns dt_begin as an iso formatted string.  Microseconds just aren't important to me.
     def get_datetime_end(self) -> str:
         return self.dt_end.replace(microsecond=0).isoformat()
