@@ -5,3 +5,4 @@ __pycache__
 time.log
 .idea/
 accepted_activities.p
+.cache
