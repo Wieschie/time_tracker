@@ -10,7 +10,7 @@ class Activity(Event):
         self.dt_end = dt_end
 
     def __str__(self):
-        return super(Activity, self).__str__() + "," + self.dt_end
+        return self.get_datetime_begin() + "," + self.get_datetime_end() + "," + self.activity_type
 
     # adding two activities just checks to make sure the tag is the same and then returns total duration
     # TODO make this useful or delete it
@@ -23,6 +23,10 @@ class Activity(Event):
             return self.get_duration() + other
         else:
             return NotImplemented
+
+    # returns dt_begin as an iso formatted string.  Microseconds just aren't important to me.
+    def get_datetime_end(self) -> str:
+        return self.dt_end.replace(microsecond=0).isoformat()
 
     def get_duration(self) -> timedelta:
         return self.dt_end - self.dt_begin
