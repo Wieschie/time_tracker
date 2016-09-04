@@ -25,10 +25,16 @@ class Activity(Event):
             return NotImplemented
 
     # used in testing
+    # TODO redefining __eq__ means hash needs to be redefined as well
     def __eq__(self, other):
-        return self.dt_begin == other.dt_begin \
-               and self.dt_end == other.dt_end \
-               and self.activity_type == other.activity_type
+        if isinstance(other, self.__class__):
+            return self.dt_begin == other.dt_begin \
+                   and self.dt_end == other.dt_end \
+                   and self.activity_type == other.activity_type
+        return False
+
+    def __ne__(self, other):
+        return not self.__eq__(other)
 
     # returns dt_begin as an iso formatted string.  Microseconds just aren't important to me.
     def get_datetime_end(self) -> str:

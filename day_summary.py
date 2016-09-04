@@ -6,9 +6,9 @@ from consts import DT_ZERO
 
 class Day(object):
     """ custom data type that handles totalling a day's tracked time and printed formatting """
-    def __init__(self):
-        self.activities = defaultdict(lambda: timedelta())
-        self.total_td = DT_ZERO
+    def __init__(self, a=defaultdict(lambda: timedelta()), td=DT_ZERO):
+        self.activities = a
+        self.total_td = td
 
     def add_activity(self, activity: str, time: timedelta):
         self.activities[activity] += time
@@ -23,3 +23,13 @@ class Day(object):
         output += "\t" + '-' * 17 + '\n'
         output += "\ttotal:   " + str(self.total_td.time()) + '\n'
         return output
+
+    # used in testing
+    # TODO redefining __eq__ means hash needs to be redefined as well
+    def __eq__(self, other):
+        if isinstance(other, self.__class__):
+            return self.activities == other.activities and self.total_td == other.total_td
+        return False
+
+    def __ne__(self, other):
+        return not self.__eq__(other)
