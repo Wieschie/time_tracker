@@ -10,7 +10,11 @@ from day_summary import Day
 
 
 def parse_time_log(f) -> list:
-    """ Parses the local time.log file and returns a list of Activity objects (one per line) """
+    """
+    :param f:  opened csv file handle of logged activities
+    :return: list of Activity objects
+    """
+
     # load time.log using list comprehension!
     # split incoming strings into tuple(datetime, activity_type).  datetime str is a fixed length -> just use indexes
     data = [(line.strip()[:19], line.strip()[20:]) for line in f]
@@ -41,16 +45,16 @@ def parse_time_log(f) -> list:
 
 
 def get_days_totaled(activities: list) -> defaultdict(lambda: Day):
-    """ Sums all instances of each activity in a day and returns as a {day: {activity_type: duration}} """
+    """
+    :param activities: list of activities (like the one returned by parse_time_log)
+    :return: dictionary in {datetime.date: Day} format
+    """
     # group activities into days
     days = defaultdict(list)
     for a in activities:
         days[a.get_date()].append(a)
     # combine multiple occurrences of an activity within each day to get a total time per activity per day
-    # TODO want to use OrderedDict for the outer container as dates are already in order.  But it doesn't support
-    # nesting.  Extend it myself?
     # lambda is required because defaultdict needs a callable.
-    # dictionary elements look like {day(str): {activity_type(str): duration(timedelta}}
     days_totaled = defaultdict(lambda: Day())
     for day in days:
         for a in days[day]:
