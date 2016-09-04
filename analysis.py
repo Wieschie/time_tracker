@@ -24,7 +24,6 @@ def parse_time_log(f) -> list:
     # turn list of strings into list of Activity objects
     activities = []
     for i, event in enumerate(data):
-        # don't treat the last event in the log as the start of an activity.
         # events tagged 'f' are just the user logging off.  Do not treat as the start of a new activity
         if event[1] is not 'f':
             # TODO all datetimes are stored in UTC. store tzinfo?
