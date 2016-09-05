@@ -6,8 +6,10 @@ from consts import DT_ZERO
 
 class Day(object):
     """ custom data type that handles totalling a day's tracked time and printed formatting """
-    def __init__(self, a=defaultdict(lambda: timedelta()), td=DT_ZERO):
-        self.activities = a
+    def __init__(self, a=None, td=DT_ZERO):
+        # can't use a mutable object as a default value.  default params are only evaluated when def is called,
+        # and that happens precisely once, so it will return the exact same object each time.
+        self.activities = defaultdict(lambda: timedelta()) if a is None else a
         self.total_td = td
 
     def add_activity(self, activity: str, time: timedelta):
