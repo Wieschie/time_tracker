@@ -1,5 +1,3 @@
-import sys
-from datetime import datetime
 import pytz
 from tzlocal import get_localzone
 from datetime import datetime, timedelta, date
