@@ -2,10 +2,10 @@ import argparse
 import sys
 from datetime import datetime
 
-from TimeAction import TimeAction
-from ActivityAction import ActivityAction
-from logged_event import Event
-from sheets_upload import upload
+from sample.TimeAction import TimeAction
+from sample.ActivityAction import ActivityAction
+from sample.logged_event import Event
+from sample.sheets_upload import upload
 
 
 def record_event_sheets(event: Event):
@@ -16,7 +16,7 @@ def record_event_sheets(event: Event):
 def record_event_local(event: Event):
     """ writes event in plaintext to a local logfile """
     # sys.path[0] is the directory of this script.  http://stackoverflow.com/a/5475224/1706825
-    f = open(sys.path[0] + '/time.log', 'a')
+    f = open(sys.path[0] + '/sample/time.log', 'a')
     f.write(str(event) + '\n')
     f.close()
     
