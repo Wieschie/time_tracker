@@ -23,13 +23,13 @@ expected_activity_list = [Activity(datetime(2016, 8, 24, 20, 4, 57, tzinfo=pytz.
 class TestParsing:
 
     def test_standard(self):
-        f = open("tests/time_standard.log", 'r')
-        assert analysis.parse_time_log(f) == expected_activity_list
+        with open("tests/time_standard.log", 'r') as f:
+            assert analysis.parse_time_log(f) == expected_activity_list
 
     def test_unfinished_activity(self):
         """ test the case where an activity is still ongoing """
-        f = open("tests/time_unfinished.log", 'r')
-        results_list = analysis.parse_time_log(f)
+        with open("tests/time_unfinished.log", 'r') as f:
+            results_list = analysis.parse_time_log(f)
         for x in range(len(expected_activity_list)):
             assert results_list[x] == expected_activity_list[x]
 

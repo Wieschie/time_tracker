@@ -18,7 +18,6 @@ def parse_time_log(f) -> list:
     # load time.log using list comprehension!
     # split incoming strings into tuple(datetime, activity_type).  datetime str is a fixed length -> just use indexes
     data = [(line.strip()[:19], line.strip()[20:]) for line in f]
-    f.close()
 
     # until we hit an event tagged 'f', each time gap in events measures the duration of a certain activity
     # turn list of strings into list of Activity objects
@@ -78,6 +77,6 @@ if __name__ == '__main__':
     parser = argparse.ArgumentParser(description='Analyze time.log.')
     parser.add_argument('-n', dest='last_n_days', help="Display a summary of the last n days.", type=int, default=None)
     flags = parser.parse_args()
-    log = open("time.log", 'r')
-    activity_list = parse_time_log(log)
+    with open("time.log", 'r') as log:
+        activity_list = parse_time_log(log)
     print_day_summary(activity_list, flags.last_n_days)
