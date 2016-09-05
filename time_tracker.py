@@ -16,7 +16,7 @@ def record_event_sheets(event: Event):
 def record_event_local(event: Event):
     """ writes event in plaintext to a local logfile """
     # sys.path[0] is the directory of this script.  http://stackoverflow.com/a/5475224/1706825
-    f = open(sys.path[0] + '/sample/time.log', 'a')
+    f = open(sys.path[0] + '/data/time.log', 'a')
     f.write(str(event) + '\n')
     f.close()
     

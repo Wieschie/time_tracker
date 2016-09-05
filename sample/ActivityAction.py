@@ -11,14 +11,14 @@ class ActivityAction(Action):
 
     def __call__(self, parser, namespace, values, option_string=None):
         try:
-            accepted_activities = pickle.load(open(sys.path[0] + "/sample/accepted_activities.p", 'rb'))
+            accepted_activities = pickle.load(open(sys.path[0] + "/data/accepted_activities.p", 'rb'))
         except FileNotFoundError:
             accepted_activities = set()
 
         if values not in accepted_activities:
             if yesno("Activity not recognized. Add it?"):
                 accepted_activities.add(values)
-                pickle.dump(accepted_activities, open(sys.path[0] + "/sample/accepted_activities.p", 'wb'))
+                pickle.dump(accepted_activities, open(sys.path[0] + "/data/accepted_activities.p", 'wb'))
             else:
                 # quit if the user mistyped an activity tag
                 exit()
