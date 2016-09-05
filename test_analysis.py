@@ -3,10 +3,8 @@ from datetime import datetime
 import pytz
 from tzlocal import get_localzone
 from datetime import datetime, timedelta, date
-from collections import defaultdict
 
 from logged_activity import Activity
-from day_summary import Day
 import analysis
 
 local_tz = get_localzone()
@@ -30,6 +28,7 @@ class TestParsing:
         """ test the case where an activity is still ongoing """
         with open("tests/time_unfinished.log", 'r') as f:
             results_list = analysis.parse_time_log(f)
+
         for x in range(len(expected_activity_list)):
             assert results_list[x] == expected_activity_list[x]
 
@@ -41,18 +40,19 @@ class TestParsing:
 
 
 class TestDaysTotaled:
-    day1, day2 = Day(), Day()
-    for a in expected_activity_list[:2]:
-        day1.add_activity(a.activity_type, a.get_duration())
-    for a in expected_activity_list[2:]:
-        day2.add_activity(a.activity_type, a.get_duration())
-    s = [(date(2016, 8, 24), day1), (date(2016, 8, 25), day2)]
-    expected_days_totaled = defaultdict(lambda: timedelta)
-    for k, v in s:
-        expected_days_totaled[k] = v
 
     def test_get_days_totaled(self):
-        assert analysis.get_days_totaled(expected_activity_list) == self.expected_days_totaled
+        expected_dates = [date(2016, 8, 24), date(2016, 8, 25)]
+        expected_activity_types = ['p', 'g']
+        expected_td = [timedelta(hours=1, minutes=16, seconds=59), timedelta(minutes=15, seconds=12)]
+
+        results = analysis.get_days_totaled(expected_activity_list)
+        assert set(results.keys()) == set(expected_dates)
+
+        for ed, ea, et in zip(expected_dates, expected_activity_types, expected_td):
+            assert list(results[ed].activities)[0] == ea
+            assert results[ed].activities[ea] == et
+            assert results[ed].total_td == et
 
 
 class TestPrintSummary:
