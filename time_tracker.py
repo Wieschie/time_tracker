@@ -3,6 +3,7 @@ import sys
 from datetime import datetime
 import os
 import time
+import _thread
 
 
 from sample.TimeAction import TimeAction
@@ -25,12 +26,11 @@ def record_event_local(event: Event):
 
 
 def remind(mins: int):
-    time.sleep(mins)
+    time.sleep(mins*60)
     print('\a', end='')
     print('\nYour time is up!  \nYou will still need to log the end of your activity.')
-    time.sleep(2)
     print('\a', end='')
-    
+    exit()
 
 if __name__ == '__main__':
     # ---- argument parsing -----
