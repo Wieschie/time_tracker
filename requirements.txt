@@ -1,5 +1,6 @@
 google-api-python-client
 httplib2
+matplotlib
 oauth2client
 pytest
 pytz

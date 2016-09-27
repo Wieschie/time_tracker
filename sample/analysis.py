@@ -3,6 +3,7 @@ from datetime import datetime
 
 import pytz
 from tzlocal import get_localzone
+import matplotlib.pyplot as plt
 
 from sample.logged_activity import Activity
 from sample.day_summary import Day
@@ -50,22 +51,29 @@ def get_days_totaled(activities: list) -> defaultdict(lambda: Day):
     days = defaultdict(list)
     for a in activities:
         days[a.get_date()].append(a)
-    # combine multiple occurrences of an activity within each day to get a total time per activity per day
-    # lambda is required because defaultdict needs a callable.
+    # add all activities to respective Days
     days_totaled = defaultdict(lambda: Day())
     for day in days:
+        days_totaled[day].set_date(day)
         for a in days[day]:
             days_totaled[day].add_activity(a.activity_type, a.get_duration())
     return days_totaled
 
 
-def print_day_summary(activities: list, last_n_days=None):
-    """ print out a summary of activity totals per day """
-    if type(last_n_days) is int:
-        last_n_days *= -1
-    days_totaled = get_days_totaled(activities)
+def sort_days(days_totaled: defaultdict(lambda: Day), last_n_days: int) -> list:
+    sorted_days_totaled = []
     # this results in a sorted list of datetimes.  Use this as a key to access days_totaled in sequential order.
-    sorted_days = sorted(days_totaled)
-    for day in sorted_days[last_n_days:]:
-        print(day.strftime("%a %b %d") + ":")
-        print(days_totaled[day])
+    sorted_dates = sorted(days_totaled)
+    for day in sorted_dates[-last_n_days:]:
+        sorted_days_totaled.append(days_totaled[day])
+    return sorted_days_totaled
+
+
+def print_day_summary(sorted_days_totaled: list):
+    """ print out a summary of activity totals per day """
+    for day in sorted_days_totaled:
+        print(day)
+
+
+def graph_days(sorted_days_totaled: list):
+    return

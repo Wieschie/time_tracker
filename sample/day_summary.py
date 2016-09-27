@@ -1,5 +1,5 @@
 from collections import defaultdict
-from datetime import timedelta
+from datetime import timedelta, date
 
 from sample.consts import DT_ZERO
 
@@ -11,6 +11,10 @@ class Day(object):
         # and that happens precisely once, so it will return the exact same object each time.
         self.activities = defaultdict(lambda: timedelta()) if a is None else a
         self.total_td = td
+        self.date = None
+
+    def set_date(self, d: date):
+        self.date = d
 
     def add_activity(self, activity: str, time: timedelta):
         self.activities[activity] += time
@@ -18,6 +22,7 @@ class Day(object):
 
     def __str__(self):
         output = str()
+        output += self.date.strftime("%a %b %d") + ":\n"
         # print out activities in alphabetical order.  Just ensures they're in the same order each day.
         sorted_activities = sorted(self.activities)
         for a in sorted_activities:
