@@ -4,7 +4,6 @@ import argparse
 import sample.analysis as analysis
 
 if __name__ == '__main__':
-    # TODO parse some args
     parser = argparse.ArgumentParser(description='Analyze time.log.')
     parser.add_argument('-n', dest='last_n_days', help="Analyze the last n days only.", type=int, default=0)
     parser.add_argument('-f', dest='filename', help="Specify a log file to analyze.", type=str, default="data/time.log")
