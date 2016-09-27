@@ -4,9 +4,11 @@ from datetime import datetime
 import pytz
 from tzlocal import get_localzone
 import matplotlib.pyplot as plt
+import matplotlib.dates as mdates
 
 from sample.logged_activity import Activity
 from sample.day_summary import Day
+
 
 
 def parse_time_log(f) -> list:
@@ -76,4 +78,13 @@ def print_day_summary(sorted_days_totaled: list):
 
 
 def graph_days(sorted_days_totaled: list):
-    return
+    dates = [day.date for day in sorted_days_totaled]
+    times = [day.total_td.total_seconds()/3600 for day in sorted_days_totaled]
+    fig, ax = plt.subplots(1)
+    fig.autofmt_xdate()
+    plt.title('Computer time')
+    ax.bar(dates, times)
+    plt.ylabel('Hours spent')
+    ax.fmt_xdata = mdates.DateFormatter('%Y-%m-%d')
+    ax.grid(b=True, which='major', axis='y', color='b', linestyle='-')
+    plt.savefig('data/barchart.png', bbox_inches='tight')
