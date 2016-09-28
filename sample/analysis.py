@@ -80,7 +80,14 @@ def print_day_summary(sorted_days_totaled: list):
 def graph_days(sorted_days_totaled: list):
     dates = [day.date for day in sorted_days_totaled]
     times = [day.total_td.total_seconds()/3600 for day in sorted_days_totaled]
-    fig, ax = plt.subplots(1)
+
+    try:
+        fig, ax = plt.subplots(1)
+    except Exception as ex:
+        print(ex)
+        print("You may need to set a different backend in your matplotlibrc.  (try 'backend: agg')")
+        exit()
+
     fig.autofmt_xdate()
     plt.title('Computer time')
     ax.bar(dates, times)
