@@ -5,6 +5,7 @@ import pytz
 from tzlocal import get_localzone
 import matplotlib.pyplot as plt
 import matplotlib.dates as mdates
+import matplotlib.patches as patches
 
 from sample.logged_activity import Activity
 from sample.day_summary import Day
@@ -95,3 +96,22 @@ def graph_days(sorted_days_totaled: list):
     ax.fmt_xdata = mdates.DateFormatter('%Y-%m-%d')
     ax.grid(b=True, which='major', axis='y', color='b', linestyle='-')
     plt.savefig('data/barchart.png', bbox_inches='tight')
+
+
+def draw_daymap(activity_list: list):
+    fig = plt.figure()
+    ax = fig.add_subplot(111, aspect='equal')
+
+    fig.autofmt_xdate()
+    plt.ylabel('Time of day')
+
+    # TODO handle activities spanning across days
+    for a in activity_list:
+        t = a.dt_end.time()
+        rt = t.hour * 60 + t.minute
+        d = round(a.get_duration().total_seconds()/60)
+        print("Adding rectangle with params ({},{})), 0.1, {}".format(a.get_date(), rt, d))
+        ax.add_patch(patches.Rectangle((a.get_date(), rt), 0.1, d))
+
+
+    plt.savefig('data/heatmap.png', bbox_inches='tight')
