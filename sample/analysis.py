@@ -100,9 +100,9 @@ def graph_days(sorted_days_totaled: list):
 
 def draw_daymap(activity_list: list):
     fig = plt.figure()
-    ax = fig.add_subplot(111, aspect='equal')
-
-    fig.autofmt_xdate()
+    ax = fig.add_subplot(111)
+    ax.axis([275, 300, 0, 60*24])
+    #fig.autofmt_xdate()
     plt.ylabel('Time of day')
 
     # TODO handle activities spanning across days
@@ -111,7 +111,8 @@ def draw_daymap(activity_list: list):
         rt = t.hour * 60 + t.minute
         d = round(a.get_duration().total_seconds()/60)
         print("Adding rectangle with params ({},{})), 0.1, {}".format(a.get_date(), rt, d))
-        ax.add_patch(patches.Rectangle((a.get_date(), rt), 0.1, d))
 
+        # date handling is way off but as a prototype it gets the point across
+        ax.add_patch(patches.Rectangle((31*a.get_date().month + a.get_date().day, rt), 0.75, d))
 
     plt.savefig('data/heatmap.png', bbox_inches='tight')
