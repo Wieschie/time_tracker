@@ -1,5 +1,5 @@
 init:
 	pip3 install -r requirements.txt
-	mkdir data
+	if [ ! -d "data" ]; then mkdir data; fi
 test:
 	pytest
