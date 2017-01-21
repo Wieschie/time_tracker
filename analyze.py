@@ -16,5 +16,6 @@ if __name__ == '__main__':
     # sorted list of Days
     sorted_days_totaled = analysis.sort_days(days_totaled, flags.last_n_days)
 
-    analysis.print_day_summary(sorted_days_totaled)
-    analysis.graph_days(sorted_days_totaled)
+#    analysis.print_day_summary(sorted_days_totaled)
+#    analysis.graph_days(sorted_days_totaled)
+    analysis.draw_daymap(activity_list)
