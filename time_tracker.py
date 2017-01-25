@@ -3,7 +3,7 @@ import sys
 from datetime import datetime
 import os
 import time
-
+import sqlite3
 
 from sample.TimeAction import TimeAction
 from sample.ActivityAction import ActivityAction
@@ -23,6 +23,21 @@ def record_event_local(event: Event):
     f.write('\n' + str(event))
     f.close()
 
+
+def record_event_sqlite(event: Event):
+    conn = sqlite3.connect(sys.path[0] + '/data/time.db')
+    c = conn.cursor()
+
+    # check if events table exists and create one if needed
+    c.execute("SELECT name FROM sqlite_master WHERE type='table' AND name='events'")
+    if c.fetchone() is None:
+        init_sqlite_db(conn)
+
+
+
+def init_sqlite_db(conn: sqlite3.Connection):
+    conn.execute("(CREATE TABLE events (timestamp text, activity_type text, tz text)")
+    conn.commit()
 
 def remind(mins: int):
     time.sleep(mins)
