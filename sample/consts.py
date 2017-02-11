@@ -8,3 +8,4 @@ RANGE = 'experimental!A:B'
 APP_NAME = 'python_time_tracker'
 
 DT_ZERO = datetime(1970, 1, 1)
+

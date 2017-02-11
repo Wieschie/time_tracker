@@ -25,6 +25,7 @@ def record_event_local(event: Event):
 
 
 def record_event_sqlite(event: Event):
+    """ records event in a local sqlite db """
     conn = sqlite3.connect(sys.path[0] + '/data/time.db')
     c = conn.cursor()
 
@@ -34,12 +35,14 @@ def record_event_sqlite(event: Event):
         init_sqlite_db(conn)
 
 
-
 def init_sqlite_db(conn: sqlite3.Connection):
+    """ creates a table with the desired schema for storing events """
     conn.execute("(CREATE TABLE events (timestamp text, activity_type text, tz text)")
     conn.commit()
 
+
 def remind(mins: int):
+    """ Rings terminal bell and prints reminder message """
     time.sleep(mins)
     print('\a\nYour time is up!  \nYou will still need to log the end of your activity.')
     time.sleep(1)
