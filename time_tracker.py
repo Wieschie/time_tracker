@@ -5,6 +5,7 @@ import os
 import time
 import sqlite3
 
+from sample.consts import RECORD_METHOD
 from sample.TimeAction import TimeAction
 from sample.ActivityAction import ActivityAction
 from sample.logged_event import Event
@@ -26,6 +27,9 @@ def record_event_local(event: Event):
 
 def record_event_sqlite(event: Event):
     """ records event in a local sqlite db """
+    # TODO finish this
+    raise NotImplementedError
+
     conn = sqlite3.connect(sys.path[0] + '/data/time.db')
     c = conn.cursor()
 
@@ -67,9 +71,8 @@ if __name__ == '__main__':
     e = Event(flags.time, flags.activity)
     print("Logging activity: '" + e.activity_type + "' at " + e.get_datetime_begin() + "UTC")
     if not flags.test:
-        record_event_sheets(e)
-        record_event_local(e)
-
+        record_function = {'sheets': record_event_sheets, 'txt': record_event_local, 'sqlite': record_event_sqlite}
+        record_function[RECORD_METHOD](e)
     # if a reminder is set, fork and run that reminder in the background
     if flags.remind_time:
         child_pid = os.fork()
@@ -77,4 +80,3 @@ if __name__ == '__main__':
             print("You will be reminded in {} minutes!".format(flags.remind_time))
         else:
             remind(flags.remind_time)
-
