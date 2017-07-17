@@ -11,7 +11,6 @@ from sample.logged_activity import Activity
 from sample.day_summary import Day
 
 
-
 def parse_time_log(f) -> list:
     """
     :param f:  opened csv file handle of logged activities

@@ -69,7 +69,7 @@ if __name__ == '__main__':
 
     # create and record the event.
     e = Event(flags.time, flags.activity)
-    print("Logging activity: '" + e.activity_type + "' at " + e.get_datetime_begin() + "UTC")
+    print("Logging activity: " + e.activity_type + " at " + e.get_localtime())
     if not flags.test:
         record_function = {'sheets': record_event_sheets, 'txt': record_event_local, 'sqlite': record_event_sqlite}
         record_function[RECORD_METHOD](e)

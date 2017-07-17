@@ -12,7 +12,7 @@ RECORD_METHOD = 'sheets'
 ID = '1abkU6C-H3pUg6CNdNTEHYnXXwfsSE7wPScJs0N2PpJc'
 
 # columns to be edited on google sheet
-RANGE = 'experimental!A:B'
+RANGE = 'experimental!A:C'
 
 # app name is for the sheets api
 APP_NAME = 'python_time_tracker'
