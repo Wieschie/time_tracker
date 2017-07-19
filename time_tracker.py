@@ -3,18 +3,13 @@ import sys
 from datetime import datetime
 import os
 import time
-import sqlite3
 
 from sample.consts import RECORD_METHOD
 from sample.TimeAction import TimeAction
 from sample.ActivityAction import ActivityAction
 from sample.logged_event import Event
-from sample.sheets_upload import upload
-
-
-def record_event_sheets(event: Event):
-    """ appends the event to a google sheet """
-    upload(event)
+from sample.sheets_upload import upload as record_event_sheets
+from sample.db import record_event_sqlite
 
 
 def record_event_local(event: Event):
@@ -23,26 +18,6 @@ def record_event_local(event: Event):
     f = open(sys.path[0] + '/data/time.log', 'a')
     f.write('\n' + str(event))
     f.close()
-
-
-def record_event_sqlite(event: Event):
-    """ records event in a local sqlite db """
-    # TODO finish this
-    raise NotImplementedError
-
-    conn = sqlite3.connect(sys.path[0] + '/data/time.db')
-    c = conn.cursor()
-
-    # check if events table exists and create one if needed
-    c.execute("SELECT name FROM sqlite_master WHERE type='table' AND name='events'")
-    if c.fetchone() is None:
-        init_sqlite_db(conn)
-
-
-def init_sqlite_db(conn: sqlite3.Connection):
-    """ creates a table with the desired schema for storing events """
-    conn.execute("(CREATE TABLE events (timestamp text, activity_type text, tz text)")
-    conn.commit()
 
 
 def remind(mins: int):
