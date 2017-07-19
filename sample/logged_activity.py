@@ -1,4 +1,5 @@
 from datetime import datetime, timedelta, date
+import pytz
 
 from sample.logged_event import Event
 
@@ -7,7 +8,7 @@ class Activity(Event):
 
     def __init__(self, dt_begin: datetime, dt_end: datetime, activity_type: str):
         super(Activity, self).__init__(dt_begin, activity_type)
-        self.dt_end = dt_end
+        self.dt_end = pytz.utc.localize(dt_end)
 
     def __str__(self):
         return self.get_datetime_begin() + "," + self.get_datetime_end() + "," + self.activity_type

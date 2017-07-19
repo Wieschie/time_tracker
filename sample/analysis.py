@@ -1,8 +1,6 @@
 from collections import defaultdict
 from datetime import datetime
 
-import pytz
-from tzlocal import get_localzone
 import matplotlib.pyplot as plt
 import matplotlib.dates as mdates
 import matplotlib.patches as patches
@@ -18,28 +16,23 @@ def parse_time_log(f) -> list:
     """
 
     # load time.log using list comprehension!
-    # split incoming strings into tuple(datetime, activity_type).  datetime str is a fixed length -> just use indexes
-    data = [(line.strip()[:19], line.strip()[20:]) for line in f]
+    # [datetime, timezone name, activity name]
+    data = [line.split(',') for line in f]
 
     # until we hit an event tagged 'f', each time gap in events measures the duration of a certain activity
     # turn list of strings into list of Activity objects
     activities = []
     for i, event in enumerate(data):
         # events tagged 'f' are just the user logging off.  Do not treat as the start of a new activity
-        if event[1] is not 'f':
-            # TODO all datetimes are stored in UTC. store tzinfo?
-            # Convert to local timezone.  credit to:
-            # http://stackoverflow.com/a/18569497/1706825
-            # http://stackoverflow.com/a/4530166/1706825
-            local_tz = get_localzone()
+        if event[2] is not 'f':
             fmt = "%Y-%m-%dT%H:%M:%S"
-            dt_begin = datetime.strptime(event[0], fmt).replace(tzinfo=pytz.utc).astimezone(local_tz)
+            dt_begin = datetime.strptime(event[0], fmt)
             if i != len(data) - 1:
-                dt_end = datetime.strptime(data[i+1][0], fmt).replace(tzinfo=pytz.utc).astimezone(local_tz)
+                dt_end = datetime.strptime(data[i+1][0], fmt)
             # the last event isn't marked as 'f', so it's ongoing.  We can total the time up until now.
             else:
-                dt_end = datetime.now().replace(microsecond=0, tzinfo=local_tz)
-            activity_type = event[1]
+                dt_end = datetime.utcnow().replace(microsecond=0)
+            activity_type = event[2]
             activities.append(Activity(dt_begin, dt_end, activity_type))
     return activities
 
@@ -101,7 +94,6 @@ def draw_daymap(activity_list: list):
     fig = plt.figure()
     ax = fig.add_subplot(111)
     ax.axis([275, 300, 0, 60*24])
-    #fig.autofmt_xdate()
     plt.ylabel('Time of day')
 
     # TODO handle activities spanning across days
@@ -109,7 +101,6 @@ def draw_daymap(activity_list: list):
         t = a.dt_end.time()
         rt = t.hour * 60 + t.minute
         d = round(a.get_duration().total_seconds()/60)
-        print("Adding rectangle with params ({},{})), 0.1, {}".format(a.get_date(), rt, d))
 
         # date handling is way off but as a prototype it gets the point across
         ax.add_patch(patches.Rectangle((31*a.get_date().month + a.get_date().day, rt), 0.75, d))

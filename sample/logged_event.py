@@ -13,9 +13,10 @@ class Event(object):
     def __str__(self):
         return self.get_datetime_begin() + "," + str(self.tzinfo) + "," + self.activity_type
 
-    # returns dt_begin as an iso formatted string.  Microseconds just aren't important to me.
+    # returns dt_begin as an iso formatted string.  Discard timezone info because all recorded times should
+    # be in UTC
     def get_datetime_begin(self) -> str:
-        return self.dt_begin.isoformat()
+        return self.dt_begin.isoformat()[:-6]
 
     def get_localtime(self):
         return str(self.dt_begin.astimezone(self.tzinfo))

@@ -1,21 +1,18 @@
 from datetime import datetime, timedelta, date
 
-import pytz
-from tzlocal import get_localzone
 import os
 
 from sample import analysis
 from sample.logged_activity import Activity
 
-local_tz = get_localzone()
-expected_activity_list = [Activity(datetime(2016, 8, 24, 20, 4, 57, tzinfo=pytz.utc).astimezone(local_tz),
-                                   datetime(2016, 8, 24, 20, 29, 36, tzinfo=pytz.utc).astimezone(local_tz), 'p'),
-                          Activity(datetime(2016, 8, 24, 20, 32, 19, tzinfo=pytz.utc).astimezone(local_tz),
-                                   datetime(2016, 8, 24, 21, 24, 39, tzinfo=pytz.utc).astimezone(local_tz), 'p'),
-                          Activity(datetime(2016, 8, 25, 18, 33, 41, tzinfo=pytz.utc).astimezone(local_tz),
-                                   datetime(2016, 8, 25, 18, 45, 17, tzinfo=pytz.utc).astimezone(local_tz), 'g'),
-                          Activity(datetime(2016, 8, 25, 18, 45, 17, tzinfo=pytz.utc).astimezone(local_tz),
-                                   datetime(2016, 8, 25, 18, 48, 53, tzinfo=pytz.utc).astimezone(local_tz), 'g')]
+expected_activity_list = [Activity(datetime(2016, 8, 24, 20, 4, 57),
+                                   datetime(2016, 8, 24, 20, 29, 36), 'p'),
+                          Activity(datetime(2016, 8, 24, 20, 32, 19),
+                                   datetime(2016, 8, 24, 21, 24, 39), 'p'),
+                          Activity(datetime(2016, 8, 25, 18, 33, 41),
+                                   datetime(2016, 8, 25, 18, 45, 17), 'g'),
+                          Activity(datetime(2016, 8, 25, 18, 45, 17),
+                                   datetime(2016, 8, 25, 18, 48, 53), 'g')]
 
 
 class TestParsing:
@@ -33,10 +30,10 @@ class TestParsing:
             assert results_list[x] == expected_activity_list[x]
 
         # the last event is ongoing so I can't test an exact end time
-        expected_ongoing_dt_begin = datetime(2016, 8, 25, 18, 50, 53, tzinfo=pytz.utc).astimezone(local_tz)
+        expected_ongoing_dt_begin = datetime(2016, 8, 25, 18, 50, 53)
         assert results_list[-1].dt_begin == expected_ongoing_dt_begin \
             and results_list[-1].activity_type == 'p' \
-            and datetime.now().replace(tzinfo=local_tz) - results_list[-1].dt_end < timedelta(minutes=1)
+            and datetime.now() - results_list[-1].dt_end < timedelta(minutes=1)
 
 
 class TestDaysTotaled:
