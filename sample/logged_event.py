@@ -16,7 +16,7 @@ class Event(object):
     # returns dt_begin as an iso formatted string.  Discard timezone info because all recorded times should
     # be in UTC
     def get_datetime_begin(self) -> str:
-        return self.dt_begin.isoformat()[:-6]
+        return self.dt_begin.isoformat()
 
     def get_localtime(self):
         return str(pytz.utc.localize(self.dt_begin).astimezone(self.tzinfo))
