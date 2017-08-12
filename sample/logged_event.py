@@ -13,8 +13,7 @@ class Event(object):
     def __str__(self):
         return self.get_datetime_begin() + "," + str(self.get_offset()) + "," + self.activity_type
 
-    # returns dt_begin as an iso formatted string.  Discard timezone info because all recorded times should
-    # be in UTC
+    # returns dt_begin as an iso formatted string.
     def get_datetime_begin(self) -> str:
         return self.dt_begin.isoformat()
 
